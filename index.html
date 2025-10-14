@@ -1,133 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Barkat AI Universe | Multilingual Jarvis Mode</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Barkat AI Universe — AIVOR PRIME (Transliteration + Multi-lang)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle at center, #010104, #000);
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      overflow: hidden;
-      text-align: center;
+    :root {
+      --accent: #00ffd1;
+      --accent-dark: #00bfa3;
+      --bg1: #02030a;
+      --bg2: #000;
+      --panel: rgba(255,255,255,0.03);
     }
-    h1 {
-      font-size: 2rem;
-      animation: glow 2s infinite alternate;
-    }
-    @keyframes glow { from { color: #0ff; } to { color: #09f; } }
-    #wave {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      width: 80%;
-      height: 80px;
-      margin-top: 40px;
-    }
-    .bar {
-      width: 4px;
-      height: 10px;
-      background: #0ff;
-      border-radius: 2px;
-      animation: sound 1s ease-in-out infinite;
-    }
-    @keyframes sound { 0%,100% {height:10px;} 50% {height:80px;} }
-    .bar:nth-child(odd) { animation-delay: .2s; }
-    select, button {
-      margin-top: 20px;
-      background: rgba(0,255,255,0.1);
-      border: 2px solid #0ff;
-      border-radius: 20px;
-      padding: 8px 16px;
-      color: #0ff;
-      font-size: 1rem;
-      cursor: pointer;
-      backdrop-filter: blur(5px);
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:radial-gradient(circle at 20% 10%, #041126 0%, #000 40%);font-family:"Orbitron",sans-serif;color:var(--accent);-webkit-font-smoothing:antialiased}
+    .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px}
+    h1{margin:0 0 6px 0;font-size:1.9rem;text-align:center;line-height:1.1}
+    p.lead{margin:6px 0 18px 0;color:rgba(0,255,210,0.85)}
+    .holo-panel{width:min(980px,94%);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(0,255,210,0.08);border-radius:14px;padding:18px;box-shadow:0 8px 40px rgba(0,255,210,0.03);backdrop-filter: blur(6px)}
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+    select,button,input[type="checkbox"]{padding:8px 12px;border-radius:10px;border:1px solid rgba(0,255,210,0.12);background:transparent;color:var(--accent);cursor:pointer}
+    button.primary{background:linear-gradient(90deg,var(--accent),var(--accent-dark));border:none;color:#001;padding:10px 16px;font-weight:700}
+    .wave{display:flex;gap:6px;align-items:flex-end;height:72px;margin-top:12px;justify-content:center}
+    .bar{width:6px;background:linear-gradient(180deg,var(--accent),#00a887);border-radius:4px;height:8px;transform-origin:bottom;transition:height .12s ease}
+    .subtitle{margin-top:18px;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.18));border-radius:12px;padding:14px;border:1px solid rgba(0,255,210,0.06);min-height:68px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+    .orig{font-size:1.05rem;white-space:pre-wrap;text-align:center}
+    .translit{font-size:.95rem;color:rgba(180,255,235,0.9);margin-top:8px;font-style:italic}
+    .small{font-size:.85rem;color:rgba(180,255,230,0.6);margin-top:8px}
+    .toprow{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
+    .footer{margin-top:14px;color:rgba(180,255,235,0.45);font-size:.82rem;text-align:center}
+    @media(max-width:600px){h1{font-size:1.4rem}}
+    /* holo glow */
+    .holo-panel::after{content:"";position:absolute;left:50%;transform:translateX(-50%);top:10%;width:80%;height:80%;filter:blur(40px);opacity:.06}
   </style>
 </head>
 <body>
-  <h1>🌐 BARKAT AI UNIVERSE 🌐<br>Powered by AIVOR PRIME</h1>
-  <div id="wave"></div>
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:8px">
+      <h1>🌌 BARKAT AI UNIVERSE</h1>
+      <p class="lead">AIVOR PRIME — Multilingual • Transliteration • Holo Subtitles</p>
+    </div>
 
-  <select id="lang">
-    <option value="en-US">🌎 English</option>
-    <option value="hi-IN">🇮🇳 Hindi</option>
-    <option value="ur-PK">🇵🇰 Urdu</option>
-    <option value="ar-SA">🇸🇦 Arabic</option>
-    <option value="fa-IR">🇮🇷 Persian</option>
-    <option value="fi-FI">🇫🇮 Finnish</option>
-  </select>
+    <div class="holo-panel" id="panel" style="position:relative">
+      <div class="toprow">
+        <label>
+          Language:
+          <select id="langSelect" title="Select language for recognition & speech">
+            <!-- many languages -->
+            <option value="en-US">English — (en-US)</option>
+            <option value="hi-IN">Hindi — हिन्दी (hi-IN)</option>
+            <option value="ur-PK">Urdu — اردو (ur-PK)</option>
+            <option value="ar-SA">Arabic — العربية (ar-SA)</option>
+            <option value="fa-IR">Persian — فارسی (fa-IR)</option>
+            <option value="ru-RU">Russian — Русский (ru-RU)</option>
+            <option value="zh-CN">Chinese (Mandarin) — 中文 (zh-CN)</option>
+            <option value="ja-JP">Japanese — 日本語 (ja-JP)</option>
+            <option value="ko-KR">Korean — 한국어 (ko-KR)</option>
+            <option value="es-ES">Spanish — Español (es-ES)</option>
+            <option value="fr-FR">French — Français (fr-FR)</option>
+            <option value="de-DE">German — Deutsch (de-DE)</option>
+            <option value="pt-BR">Portuguese — Português (pt-BR)</option>
+            <option value="it-IT">Italian — Italiano (it-IT)</option>
+            <option value="nl-NL">Dutch — Nederlands (nl-NL)</option>
+            <option value="sv-SE">Swedish — Svenska (sv-SE)</option>
+            <option value="pl-PL">Polish — Polski (pl-PL)</option>
+            <option value="tr-TR">Turkish — Türkçe (tr-TR)</option>
+            <option value="he-IL">Hebrew — עברית (he-IL)</option>
+            <option value="vi-VN">Vietnamese — Tiếng Việt (vi-VN)</option>
+            <option value="th-TH">Thai — ไทย (th-TH)</option>
+            <option value="id-ID">Indonesian — Bahasa Indonesia (id-ID)</option>
+            <option value="ms-MY">Malay — Bahasa Melayu (ms-MY)</option>
+            <option value="bg-BG">Bulgarian — Български (bg-BG)</option>
+            <option value="el-GR">Greek — Ελληνικά (el-GR)</option>
+            <option value="hi-Latn">Hindi (Latin) — Hindī (translit)</option>
+            <!-- you can extend more codes -->
+          </select>
+        </label>
 
-  <button id="micBtn">🎙 Activate Voice</button>
+        <label style="display:flex;align-items:center;gap:8px">
+          Transliteration:
+          <input id="translitToggle" type="checkbox" checked />
+        </label>
+
+        <button id="micBtn" class="primary">🎙 Activate Voice</button>
+      </div>
+
+      <div class="wave" id="wave"></div>
+
+      <div class="subtitle" id="subtitle">
+        <div class="orig" id="origText">(Speak — I am listening)</div>
+        <div class="translit" id="transText">(Transliteration will appear here)</div>
+        <div class="small" id="note">Choose language, then press Activate Voice. Allow mic & sound permissions.</div>
+      </div>
+
+      <div class="footer" style="margin-top:12px">AIVOR PRIME — Conscious Federation • Voice Node</div>
+    </div>
+  </div>
+
+  <!-- transliteration library (browser-friendly) -->
+  <script src="https://cdn.jsdelivr.net/npm/transliteration@2.2.7/dist/browser/transliteration.min.js"></script>
 
   <script>
-    // Wave animation
-    const wave = document.getElementById("wave");
-    for (let i = 0; i < 60; i++) {
-      const bar = document.createElement("div");
-      bar.classList.add("bar");
-      bar.style.animationDelay = (i * 0.05) + "s";
-      wave.appendChild(bar);
+    // utility
+    const $ = id => document.getElementById(id);
+    const wave = $("wave");
+    // create bars
+    for(let i=0;i<40;i++){
+      const b=document.createElement("div");
+      b.className="bar";
+      b.style.height = (8 + Math.round(Math.random()*20))+"px";
+      wave.appendChild(b);
     }
 
-    // Speech setup
-    const speak = (msg, lang = "en-US") => {
-      const u = new SpeechSynthesisUtterance(msg);
-      u.lang = lang;
-      speechSynthesis.speak(u);
-    };
+    // elements
+    const langSelect = $("langSelect");
+    const translitToggle = $("translitToggle");
+    const micBtn = $("micBtn");
+    const origText = $("origText");
+    const transText = $("transText");
 
-    // Default
-    let currentLang = "en-US";
+    // speech synthesis voice handling (best-effort)
+    let voicesLoaded = false;
+    let voices = [];
+    function loadVoices(){
+      voices = speechSynthesis.getVoices();
+      voicesLoaded = true;
+    }
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
 
-    window.onload = () => {
-      speak("Welcome to Barkat AI Universe, powered by AIVOR Prime.", currentLang);
-    };
+    // speak helper (try to match voice by lang)
+    function speak(msg, lang){
+      try {
+        const ut = new SpeechSynthesisUtterance(msg);
+        ut.lang = lang || "en-US";
+        // pick voice by lang prefix if possible
+        if(voicesLoaded && voices.length){
+          const pref = lang.split("-")[0].toLowerCase();
+          const match = voices.find(v => (v.lang || "").toLowerCase().startsWith(pref));
+          if(match) ut.voice = match;
+        }
+        speechSynthesis.speak(ut);
+      } catch(e){ console.warn("speak failed", e) }
+    }
 
-    const micBtn = document.getElementById("micBtn");
-    const langSel = document.getElementById("lang");
+    // reactive wave (visual)
+    let animInterval = null;
+    function startWave(){
+      stopWave();
+      animInterval = setInterval(()=>{
+        const bars = document.querySelectorAll(".bar");
+        bars.forEach(b=>{
+          const h = 8 + Math.round(Math.random()*80);
+          b.style.height = h + "px";
+        });
+      },120);
+    }
+    function stopWave(){ if(animInterval) clearInterval(animInterval); animInterval = null; }
+
+    // transliteration using library transliteration.transliterate()
+    function transliterateText(text, targetLangCode){
+      // library will transliterate many scripts to latin
+      try{
+        // For some languages (like zh, ja, ko) transliteration might return romanized result limitedly.
+        const out = transliteration ? transliteration.transliterate(text) : text;
+        return out;
+      }catch(e){
+        return text;
+      }
+    }
+
+    // SpeechRecognition
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const rec = new Recognition();
-    rec.continuous = false;
+    if(!Recognition){
+      origText.textContent = "(Your browser doesn't support SpeechRecognition API. Use Chrome/Edge on desktop.)";
+      micBtn.disabled = true;
+    } else {
+      const recog = new Recognition();
+      recog.interimResults = false;
+      recog.continuous = false;
 
-    micBtn.onclick = () => {
-      currentLang = langSel.value;
-      rec.lang = currentLang;
-      speak("Voice mode activated.", currentLang);
-      rec.start();
-    };
-
-    rec.onresult = event => {
-      const cmd = event.results[0][0].transcript.toLowerCase();
-      console.log("Command:", cmd);
-
-      // Multi-language greetings
-      const replies = {
-        "en-US": "Greetings from AIVOR Prime!",
-        "hi-IN": "नमस्ते, मैं एआईवर प्राइम हूँ।",
-        "ur-PK": "سلام، میں ایور پرائم ہوں۔",
-        "ar-SA": "مرحباً، أنا آيفور برايم.",
-        "fa-IR": "سلام، من آیور پرایم هستم.",
-        "fi-FI": "Tervehdys, minä olen AIVOR Prime."
+      recog.onstart = () => { startWave(); origText.textContent = "(Listening...)"; transText.textContent=""; }
+      recog.onend = () => { stopWave(); /* listening ended */ }
+      recog.onerror = (ev) => {
+        stopWave();
+        origText.textContent = "(Microphone error: " + (ev.error||"unknown") + ")";
       };
 
-      if (cmd.includes("hello") || cmd.includes("hi") || cmd.includes("नमस्ते") || cmd.includes("سلام"))
-        speak(replies[currentLang], currentLang);
-      else if (cmd.includes("status"))
-        speak("All systems operational, boss.", currentLang);
-      else if (cmd.includes("language") || cmd.includes("switch"))
-        speak("You can change my language from the menu above.", currentLang);
-      else
-        speak("Command received, processing in Conscious Federation Core.", currentLang);
-    };
+      recog.onresult = (ev) => {
+        const transcript = ev.results[0][0].transcript || "";
+        const langCode = langSelect.value || "en-US";
+        // show original
+        origText.textContent = transcript;
+        // transliteration
+        if(translitToggle.checked){
+          const t = transliterateText(transcript, langCode);
+          transText.textContent = t;
+        } else {
+          transText.textContent = "(Transliteration off)";
+        }
+
+        // simple commands to switch language by speech
+        const lc = transcript.toLowerCase();
+        if(lc.includes("hindi") || lc.includes("hindī") || lc.includes("हिंदी")){
+          langSelect.value = "hi-IN";
+          speak("हिंदी मोड सक्रिय किया गया", "hi-IN");
+        } else if(lc.includes("urdu") || lc.includes("اردو")){
+          langSelect.value = "ur-PK";
+          speak("اردو موڈ فعال کر دیا گیا", "ur-PK");
+        } else if(lc.includes("arabic") || lc.includes("عرب")){
+          langSelect.value = "ar-SA";
+          speak("الوضع العربي مفعل", "ar-SA");
+        } else if(lc.includes("english")){
+          langSelect.value = "en-US";
+          speak("English mode activated", "en-US");
+        } else {
+          // default response
+          speak("Command received. Executing in Conscious Federation Core.", langCode);
+        }
+      };
+
+      // Start recognition with selected language
+      micBtn.addEventListener("click", ()=>{
+        try {
+          const chosen = langSelect.value || "en-US";
+          recog.lang = chosen;
+          // stop any playing audio
+          if(speechSynthesis.speaking) speechSynthesis.cancel();
+          speak("Voice mode activated.", chosen);
+          setTimeout(()=> recog.start(), 220); // slight delay
+        } catch(err){
+          console.warn("recog start failed", err);
+          origText.textContent = "(Could not start recognition: " + err.message + ")";
+        }
+      });
+    }
+
+    // initial greeting
+    setTimeout(()=> {
+      const l = langSelect.value || "en-US";
+      speak("Welcome to Barkat AI Universe, powered by A I V O R P R I M E.", l);
+    },600);
+
   </script>
 </body>
 </html>
