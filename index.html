@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barkat AI Universe | Powered by AIVOR PRIME</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #02030a, #000);
+      color: #0ff;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.2rem;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { color: #0ff; }
+      to { color: #09f; }
+    }
+    #wave {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 80%;
+      height: 80px;
+      margin-top: 40px;
+    }
+    .bar {
+      width: 4px;
+      height: 10px;
+      background: #0ff;
+      border-radius: 2px;
+      animation: sound 1s ease-in-out infinite;
+    }
+    @keyframes sound {
+      0%, 100% { height: 10px; }
+      50% { height: 80px; }
+    }
+    .bar:nth-child(odd) { animation-delay: .2s; }
+    button {
+      margin-top: 40px;
+      background: rgba(0,255,255,0.2);
+      border: 2px solid #0ff;
+      border-radius: 30px;
+      padding: 10px 20px;
+      color: #0ff;
+      font-size: 1rem;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+    }
+  </style>
+</head>
+<body>
+  <h1>🌌 WELCOME TO BARKAT AI UNIVERSE 🌌<br>Powered by AIVOR PRIME</h1>
+  <div id="wave"></div>
+  <button id="micBtn">🎙 Activate Voice</button>
+
+  <script>
+    const wave = document.getElementById("wave");
+    for (let i = 0; i < 60; i++) {
+      const bar = document.createElement("div");
+      bar.classList.add("bar");
+      bar.style.animationDelay = (i * 0.05) + "s";
+      wave.appendChild(bar);
+    }
+
+    const speak = text => {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      speechSynthesis.speak(utter);
+    };
+
+    window.onload = () => {
+      speak("Welcome to Barkat AI Universe, powered by AIVOR Prime.");
+    };
+
+    const micBtn = document.getElementById("micBtn");
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const rec = new Recognition();
+    rec.lang = "en-US";
+    rec.continuous = false;
+
+    micBtn.onclick = () => {
+      speak("Voice mode activated");
+      rec.start();
+    };
+
+    rec.onresult = event => {
+      const command = event.results[0][0].transcript.toLowerCase();
+      if (command.includes("hello")) speak("Greetings, I am AIVOR PRIME.");
+      else if (command.includes("status")) speak("All systems operational.");
+      else speak("Command received, executing in conscious federation core.");
+    };
+  </script>
+</body>
+</html>
