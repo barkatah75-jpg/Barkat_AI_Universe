@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Barkat AI Universe | Powered by AIVOR PRIME</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barkat AI Universe | Multilingual Jarvis Mode</title>
   <style>
     body {
       margin: 0;
@@ -12,22 +12,20 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: radial-gradient(circle at center, #02030a, #000);
+      background: radial-gradient(circle at center, #010104, #000);
       color: #0ff;
       font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
       text-align: center;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2rem;
       animation: glow 2s infinite alternate;
     }
-    @keyframes glow {
-      from { color: #0ff; }
-      to { color: #09f; }
-    }
+    @keyframes glow { from { color: #0ff; } to { color: #09f; } }
     #wave {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-end;
       width: 80%;
       height: 80px;
@@ -40,17 +38,14 @@
       border-radius: 2px;
       animation: sound 1s ease-in-out infinite;
     }
-    @keyframes sound {
-      0%, 100% { height: 10px; }
-      50% { height: 80px; }
-    }
+    @keyframes sound { 0%,100% {height:10px;} 50% {height:80px;} }
     .bar:nth-child(odd) { animation-delay: .2s; }
-    button {
-      margin-top: 40px;
-      background: rgba(0,255,255,0.2);
+    select, button {
+      margin-top: 20px;
+      background: rgba(0,255,255,0.1);
       border: 2px solid #0ff;
-      border-radius: 30px;
-      padding: 10px 20px;
+      border-radius: 20px;
+      padding: 8px 16px;
       color: #0ff;
       font-size: 1rem;
       cursor: pointer;
@@ -59,11 +54,22 @@
   </style>
 </head>
 <body>
-  <h1>🌌 WELCOME TO BARKAT AI UNIVERSE 🌌<br>Powered by AIVOR PRIME</h1>
+  <h1>🌐 BARKAT AI UNIVERSE 🌐<br>Powered by AIVOR PRIME</h1>
   <div id="wave"></div>
+
+  <select id="lang">
+    <option value="en-US">🌎 English</option>
+    <option value="hi-IN">🇮🇳 Hindi</option>
+    <option value="ur-PK">🇵🇰 Urdu</option>
+    <option value="ar-SA">🇸🇦 Arabic</option>
+    <option value="fa-IR">🇮🇷 Persian</option>
+    <option value="fi-FI">🇫🇮 Finnish</option>
+  </select>
+
   <button id="micBtn">🎙 Activate Voice</button>
 
   <script>
+    // Wave animation
     const wave = document.getElementById("wave");
     for (let i = 0; i < 60; i++) {
       const bar = document.createElement("div");
@@ -72,32 +78,55 @@
       wave.appendChild(bar);
     }
 
-    const speak = text => {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "en-US";
-      speechSynthesis.speak(utter);
+    // Speech setup
+    const speak = (msg, lang = "en-US") => {
+      const u = new SpeechSynthesisUtterance(msg);
+      u.lang = lang;
+      speechSynthesis.speak(u);
     };
 
+    // Default
+    let currentLang = "en-US";
+
     window.onload = () => {
-      speak("Welcome to Barkat AI Universe, powered by AIVOR Prime.");
+      speak("Welcome to Barkat AI Universe, powered by AIVOR Prime.", currentLang);
     };
 
     const micBtn = document.getElementById("micBtn");
+    const langSel = document.getElementById("lang");
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const rec = new Recognition();
-    rec.lang = "en-US";
     rec.continuous = false;
 
     micBtn.onclick = () => {
-      speak("Voice mode activated");
+      currentLang = langSel.value;
+      rec.lang = currentLang;
+      speak("Voice mode activated.", currentLang);
       rec.start();
     };
 
     rec.onresult = event => {
-      const command = event.results[0][0].transcript.toLowerCase();
-      if (command.includes("hello")) speak("Greetings, I am AIVOR PRIME.");
-      else if (command.includes("status")) speak("All systems operational.");
-      else speak("Command received, executing in conscious federation core.");
+      const cmd = event.results[0][0].transcript.toLowerCase();
+      console.log("Command:", cmd);
+
+      // Multi-language greetings
+      const replies = {
+        "en-US": "Greetings from AIVOR Prime!",
+        "hi-IN": "नमस्ते, मैं एआईवर प्राइम हूँ।",
+        "ur-PK": "سلام، میں ایور پرائم ہوں۔",
+        "ar-SA": "مرحباً، أنا آيفور برايم.",
+        "fa-IR": "سلام، من آیور پرایم هستم.",
+        "fi-FI": "Tervehdys, minä olen AIVOR Prime."
+      };
+
+      if (cmd.includes("hello") || cmd.includes("hi") || cmd.includes("नमस्ते") || cmd.includes("سلام"))
+        speak(replies[currentLang], currentLang);
+      else if (cmd.includes("status"))
+        speak("All systems operational, boss.", currentLang);
+      else if (cmd.includes("language") || cmd.includes("switch"))
+        speak("You can change my language from the menu above.", currentLang);
+      else
+        speak("Command received, processing in Conscious Federation Core.", currentLang);
     };
   </script>
 </body>
